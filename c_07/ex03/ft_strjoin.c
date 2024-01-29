@@ -12,35 +12,38 @@
 
 #include <stdlib.h>
 
-char	ft_strcat(char **strs, char *array, char *sep)
+char	*ft_strcat(char **strs, char *array, char *sep, int size)
 {
 	auto int i = 0;
 	auto int j = 0;
 	auto int k = 0;
 	auto int l = 0;
-	while (strs[i + 1])
+	while (i < size)
 	{
+		j = 0;
 		while (strs[i][j])
 		{
 			array[k] = strs[i][j];
 			j++;
 			k++;
 		}
-		while (sep[l])
+		if (i < size - 1)
 		{
-			array[k] = sep[l];
-			k++;
-			l++;
+			l = 0;
+			while (sep[l])
+			{
+				array[k] = sep[l];
+				k++;
+				l++;
+			}
 		}
 		i++;
-		j = 0;
-		l = 0;
 	}
 	array[k] = '\0';
 	return (array);
 }
 
-int	stringssize(char **strs, int size)
+int	stringssize(char **strs, int size, char *sep)
 {
 	int	i;
 	int	j;
@@ -50,27 +53,38 @@ int	stringssize(char **strs, int size)
 	res = 0;
 	while (i < size)
 	{
+		j = 0;
 		while (strs[i][j])
 			j++;
 		res += j;
-		j = 0;
 		i++;
 	}
+	i = 0;
+	while (sep[i])
+		i++;
+	res += (i * (size - 1));
 	return (res);
 }
 
 char	*ft_strjoin(int size, char **strs, char *sep)
 {
 	char	*array;
-	int		i;
+	int	res_len;
 
 	if (size == 0)
-		return (*array);
-	i = 0;
-	while (sep[i])
-		i++;
-	array = malloc(sizeof(char) * (i * (size - 1) + stringssize(strs, size) + 1));
+		return (malloc(0));
+	res_len = stringssize(strs, size, sep);
+	array = malloc(sizeof(char) * res_len +1);
 	if (array == NULL)
 		return (NULL);
-	return (ft_strcat(strs, array, sep));
+	return (ft_strcat(strs, array, sep, size));
 }
+/*
+#include <stdio.h>
+int	main(void)
+{
+	char	*strs[] = {"ewret", "ssdfs"};
+	printf("%s\n", ft_strjoin(2, strs, ":"));
+	return (0);
+}
+*/
